@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/home"
+        android:orderInCategory="100"
+        android:title="Home "
+        android:icon="@drawable/ic_home_black_24dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/music_library"
+        android:orderInCategory="100"
+        android:title="music library"
+        android:icon="@drawable/ic_library_music_black_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/wallet"
+        android:orderInCategory="100"
+        android:title="Wallet"
+        android:icon="@drawable/ic_account_balance_wallet_black_24dp"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/download_page"
+        android:orderInCategory="200"
+        android:title="downloads"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/add_money"
+        android:orderInCategory="200"
+        android:title="Add money"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/signout"
+        android:orderInCategory="200"
+        android:title="Sign Out"
+        app:showAsAction="never" />
+</menu>

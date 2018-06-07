@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "970982415116",
+    "firebase_url": "https://faithbreed-b4980.firebaseio.com",
+    "project_id": "faithbreed-b4980",
+    "storage_bucket": "faithbreed-b4980.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970982415116:android:944e340687171694",
+        "android_client_info": {
+          "package_name": "primetechnologies.faith_breed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970982415116-dcsigqpml5iakbcqjipq26g3g83mn31f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "primetechnologies.faith_breed",
+            "certificate_hash": "cc55895944e756493aa1afe5ada06c5058bc7c13"
+          }
+        },
+        {
+          "client_id": "970982415116-lg6p9heu13p5uucb375iihoptik8duh7.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "970982415116-lg6p9heu13p5uucb375iihoptik8duh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQXWn9zWB713WiHK2cqNhLrgQcGZZIcFk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970982415116-lg6p9heu13p5uucb375iihoptik8duh7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
