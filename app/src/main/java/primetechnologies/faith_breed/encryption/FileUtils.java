@@ -12,7 +12,7 @@ public class FileUtils {
     public static void saveFile(byte[] encodedBytes, String path) {
     try {
         File file = new File(path);
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file, false));
         bos.write(encodedBytes);
         bos.flush();
         bos.close();

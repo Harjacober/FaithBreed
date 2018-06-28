@@ -19,8 +19,9 @@
             android:layout_height="256dp"
             android:fitsSystemWindows="true"
             android:gravity="bottom"
-            app:contentScrim="@color/colorPrimary"
+            app:contentScrim="#37966F"
             app:expandedTitleMargin="30dp"
+            android:background="#37966F"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -37,7 +38,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme" />
+                app:popupTheme="@style/AppTheme"
+                tools:targetApi="lollipop" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

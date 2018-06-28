@@ -1,22 +1,5 @@
 package primetechnologies.faith_breed.downloadmanager;
 
-import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Environment;
-import android.os.Handler;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import primetechnologies.faith_breed.R;
-
-import static android.content.Context.DOWNLOAD_SERVICE;
-
 public class downloadutils {
 
 /*    private long DownloadData (Uri uri, View v) {

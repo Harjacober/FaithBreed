@@ -8,18 +8,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import primetechnologies.faith_breed.R;
 
 public class AudioCategoryDisplayAdapter extends BaseAdapter {
     private Context mContext;
+    private Integer[] imageIds;
+    private String[] labels;
 
 
     public AudioCategoryDisplayAdapter(Context c, Integer[] ids, String[] labels) {
       mContext = c;
+      imageIds = ids;
+      this.labels = labels;
     }
 
     public int getCount() {
-        return imageLabels.length;
+        return labels.length;
     }
 
     public Object getItem(int position) {
@@ -39,20 +45,10 @@ public class AudioCategoryDisplayAdapter extends BaseAdapter {
         ImageView imageView = convertView.findViewById(R.id.category_image);
         TextView textView = convertView.findViewById(R.id.category_label);
 
-        imageView.setImageResource(imageIds[position]);
-        textView.setText(imageLabels[position]);
+        Picasso.with(mContext).load(imageIds[position]).resize(300,
+                300).into(imageView);
+        textView.setText(labels[position]);
         return convertView;
     }
-    private Integer[] imageIds = {
-            R.drawable.categoryimage1,
-            R.drawable.categorymage2,
-            R.drawable.categoryimage3,
-            R.drawable.categoryimage4
-    };
-    private String[] imageLabels = {
-            "All Messages",
-            "Faith Alive",
-            "Series",
-            "Sundays and Wednesdays"
-    };
+
 }

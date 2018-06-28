@@ -1,16 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
 <GridView xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="8dp"
     android:id="@+id/category_gridview"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:columnWidth="180dp"
     android:numColumns="2"
     android:verticalSpacing="10dp"
     android:horizontalSpacing="10dp"
     android:stretchMode="columnWidth"
     tools:context=".AudioCategories"
-    tools:listitem="@layout/item_audio_category_gridview">
+    tools:listitem="@layout/item_audio_category_gridview"
+    android:stateListAnimator="@animator/selector_animator"
+    tools:targetApi="lollipop">
 
 </GridView>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="32dp"
+        android:src="@android:drawable/stat_sys_headset"
+        android:layout_alignParentEnd="true" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:id="@+id/facebook"
+            android:onClick="OnFacebookClicked"
+            android:src="@drawable/socialfacebookboxblueicon"
+            android:stateListAnimator="@animator/selector_animator"
+            tools:targetApi="lollipop" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:id="@+id/twitter"
+            android:onClick="OnTwitterClicked"
+            android:src="@drawable/twittericon"
+            android:stateListAnimator="@animator/selector_animator"
+            tools:targetApi="lollipop"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:id="@+id/instagram"
+            android:onClick="OnInstagramClicked"
+            android:src="@drawable/activenstagramicon"
+            android:stateListAnimator="@animator/selector_animator"
+            tools:targetApi="lollipop"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:id="@+id/telegram"
+            android:onClick="OnTelegramClicked"
+            android:src="@drawable/telegramicon"
+            android:stateListAnimator="@animator/selector_animator"
+            tools:targetApi="lollipop"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="50dp"
+            android:id="@+id/whatsapp"
+            android:onClick="OnWhatsAppClicked"
+            android:src="@drawable/appswhatsappicon"
+            android:stateListAnimator="@animator/selector_animator"
+            tools:targetApi="lollipop"/>
+
+    </LinearLayout>
+</RelativeLayout>

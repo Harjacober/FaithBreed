@@ -2,9 +2,8 @@ package primetechnologies.faith_breed.downloadmanager;
 
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import primetechnologies.faith_breed.AllAudioList;

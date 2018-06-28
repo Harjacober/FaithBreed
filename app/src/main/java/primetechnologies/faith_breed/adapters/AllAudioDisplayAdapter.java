@@ -1,8 +1,13 @@
 package primetechnologies.faith_breed.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
+import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import primetechnologies.faith_breed.R;
@@ -28,8 +34,8 @@ public class AllAudioDisplayAdapter  extends RecyclerView.Adapter<AllAudioDispla
     }
     private final ListItemClickListener mOnclickListener;
     private final MoreMenuClickListener mOnMoreMenuclickListener;
-    List<AudioDetails> data;
-    Context context;
+    private List<AudioDetails> data;
+    private Context context;
 
 public AllAudioDisplayAdapter(ListItemClickListener mOnclickListener, MoreMenuClickListener mOnMoreMenuclickListener, List<AudioDetails> data, Context context) {
     this.mOnclickListener = mOnclickListener;
@@ -70,18 +76,19 @@ public class DataObjectHolder extends RecyclerView.ViewHolder{
     public DataObjectHolder(View itemView) {
         super(itemView);
         audioImage= itemView.findViewById(R.id.audio_image);
-        audioArtist= itemView.findViewById(R.id.audio_name);
-        audioName=  itemView.findViewById(R.id.audio_artist);
+        audioArtist= itemView.findViewById(R.id.audio_artist);
+        audioName=  itemView.findViewById(R.id.audio_name);
         moreMenu= itemView.findViewById(R.id.more_menu);
         loadIndictor = itemView.findViewById(R.id.image_progress_bar);
     }
 
     public void bind(final int position)  {
-        audioName.setText(data.get(position).getAudioName());
-        audioArtist.setText(data.get(position).getAudioArtist());
+        audioName.setText(reduceTextSize(data.get(position).getAudioName()));
+        audioArtist.setText(reduceTextSize(data.get(position).getAudioArtist()));
         loadIndictor.setVisibility(View.VISIBLE);
         audioImage.setVisibility(View.INVISIBLE);
-        Picasso.with(context).load(data.get(position).getAudioImageLink()).into(audioImage,
+        Picasso.with(context).load(data.get(position).getAudioImageLink())
+                .resize(100,100).into(audioImage,
                 new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
@@ -121,5 +128,19 @@ public class DataObjectHolder extends RecyclerView.ViewHolder{
 
     }
 }
+
+    private String reduceTextSize(String text){
+    StringBuilder newText = new StringBuilder();
+        if (text.length() >24){
+            for(int i = 0; i<24; i++){
+                newText.append(text.charAt(i));
+            }
+            return newText.toString() + "...";
+        }else {
+            return text;
+        }
+    }
+
+
 }
 

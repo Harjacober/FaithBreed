@@ -1,6 +1,7 @@
 package primetechnologies.faith_breed.encryption;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Base64;
 
 import java.security.NoSuchAlgorithmException;
@@ -13,7 +14,16 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptDecryptUtils {
-    /*public static EncryptDecryptUtils instance = null;
+    public static final String PROVIDER = "BC";
+    public static final String KEY_SPEC_ALGORITHM = "AES";
+    public static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+//    public static final String SECRET_KEY = "SECRET_KEY";
+
+    public static final int OUTPUT_KEY_LENGTH = 256;
+
+    public static SharedPreferences myPrefs = null;
+
+    public static EncryptDecryptUtils instance = null;
     private static PrefUtils prefUtils;
 
     public static EncryptDecryptUtils getInstance(Context context) {
@@ -42,13 +52,13 @@ public class EncryptDecryptUtils {
         decrypted = cipher.doFinal(fileData);
         return decrypted;
     }
-    public void saveSecretKey(SecretKey secretKey) {
+    public void saveSecretKey(SecretKey secretKey, String KEY) {
         String encodedKey = Base64.encodeToString(secretKey.getEncoded(), Base64.NO_WRAP);
-        prefUtils.saveSecretKey(encodedKey);
+        prefUtils.saveSecretKey(encodedKey, KEY);
     }
 
-    public SecretKey getSecretKey() {
-        String encodedKey = prefUtils.getSecretKey();
+    public SecretKey getSecretKey(String KEY) {
+        String encodedKey = prefUtils.getSecretKey(KEY);
         if (null == encodedKey || encodedKey.isEmpty()) {
             SecureRandom secureRandom = new SecureRandom();
             KeyGenerator keyGenerator = null;
@@ -59,11 +69,12 @@ public class EncryptDecryptUtils {
             }
             keyGenerator.init(OUTPUT_KEY_LENGTH, secureRandom);
             SecretKey secretKey = keyGenerator.generateKey();
-            saveSecretKey(secretKey);
+            saveSecretKey(secretKey, KEY);
             return secretKey;
         }
 
         byte[] decodedKey = Base64.decode(encodedKey, Base64.NO_WRAP);
         SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, KEY_SPEC_ALGORITHM);
         return originalKey;
-    }*/}
+    }
+}

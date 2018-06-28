@@ -7,6 +7,11 @@
     android:padding="8dp"
     android:id="@+id/relative_layout">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/relLayout"
+        >
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="Payment Cancelled"
+        android:text="@string/payment_cancelled"
         android:textSize="22sp"
         android:layout_below="@id/image_view"
         android:layout_centerHorizontal="true"
@@ -29,24 +34,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/gotohomepage"
-        android:text="GO TO HOMEPAGE"
+        android:text="@string/go_to_homepage"
         android:textSize="18sp"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/text_view1"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:textColor="@color/colorAccent"
-        android:onClick="OnGoToHomePageClicked"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TOP UP AGAIN"
-        android:id="@+id/topupagain"
-        android:layout_marginTop="16dp"
-        android:textSize="18sp"
-        android:layout_below="@+id/text_view1"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="16dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:onClick="OnTopUPAgainClicked"/>
+        android:textColor="#ffffff"
+        android:onClick="OnGoToHomePageClicked"
+        android:layout_marginStart="16dp" />
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -7,7 +7,7 @@ import android.preference.PreferenceManager;
 
 
 public class PrefUtils {
-/*
+
     public static final PrefUtils prefUtils = new PrefUtils();
     public static SharedPreferences myPrefs = null;
 
@@ -17,13 +17,13 @@ public class PrefUtils {
         return prefUtils;
     }
 
-    public void saveSecretKey(String value) {
+    public void saveSecretKey(String value, String KEY) {
         SharedPreferences.Editor editor = myPrefs.edit();
-        editor.putString(SECRET_KEY, value);
+        editor.putString(KEY, value);
         editor.commit();
     }
 
-    public String getSecretKey() {
-        return myPrefs.getString(SECRET_KEY, null);
-    }*/
+    public String getSecretKey(String KEY) {
+        return myPrefs.getString(KEY, null);
+    }
 }

@@ -6,21 +6,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/color_action_mode_bg</item>
     </style>
 
-    <style name="AndroidSRC.PopupMenu" parent="android:Widget.Holo.Light.ListPopupWindow">
-        <item name="android:popupBackground">#21B6A8</item>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AndroidSRC.TextAppearance" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="DefaultTheme" parent="AppTheme.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#37966F</item>
+        <item name="colorPrimaryDark">#356859</item>
+        <item name="colorAccent">#FD5523</item>
         <item name="OTPButtonStyle">@style/otpBtnStyle</item>
         <item name="PayButtonStyle">@style/payBtnStyle</item>
         <item name="PinButtonStyle">@style/pinButtonStyle</item>
@@ -28,6 +31,34 @@
         <item name="TabLayoutStyle">@style/tabLayoutStyle</item>
         <item name="PinHeaderStyle">@style/pinHeaderStyle</item>
         <item name="SavedCardButtonStyle">@style/svdCardsBtnStyle</item>
+    </style>
+
+    <style name="LoginTheme" parent="FirebaseUI">
+        <item name="colorPrimary">#356859</item>
+        <item name="colorPrimaryDark">#356859</item>
+        <item name="colorAccent">#FD5523</item>
+        <item name="colorButtonNormal">#FD5523</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:windowBackground">@drawable/window_background</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColorHint">@android:color/white</item>
+    </style>
+
+    <style name="FirebaseUI.Text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="FirebaseUI.Text.Link">
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
 </resources>

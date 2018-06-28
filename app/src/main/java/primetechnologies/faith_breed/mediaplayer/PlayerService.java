@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.session.MediaSessionManager;
@@ -24,6 +25,9 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,12 +48,13 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     private TelephonyManager telephonyManager;
     private MediaPlayer mediaPlayer;
     //path to the audio file
-    private String mediaFile;
+
     private int resumePosition;
     private AudioManager audioManager;
     //List of available Audio files
     private ArrayList<Audio> audioList;
     private int audioIndex = -1;
+    int notificationAction;
     private Audio activeAudio; //an object of the currently playing audio
     public static final String ACTION_PLAY = "primetechnologies.faith_breed.ACTION_PLAY";
     public static final String ACTION_PAUSE = "primetechnologies.faith_breed.ACTION_PAUSE";
@@ -69,22 +74,19 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            if (intent.hasExtra("media")){
-                mediaFile = intent.getStringExtra("media");
 
-            }else {
                 //Load data from SharedPreferences
-                StorageUtil storage = new StorageUtil(getApplicationContext());
-                audioList = storage.loadAudio();
-                audioIndex = storage.loadAudioIndex();
+            StorageUtil storage = new StorageUtil(getApplicationContext());
+            audioList = storage.loadAudio();
+            audioIndex = storage.loadAudioIndex();
 
-                if (audioIndex != -1 && audioIndex < audioList.size()) {
-                    //index is in a valid range
-                    activeAudio = audioList.get(audioIndex);
-                } else {
-                    stopSelf();
-                }
+            if (audioIndex != -1 && audioIndex < audioList.size()) {
+                //index is in a valid range
+                activeAudio = audioList.get(audioIndex);
+            } else {
+                stopSelf();
             }
+
         } catch (NullPointerException e) {
             stopSelf();
         }
@@ -232,12 +234,8 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         try {
             // Set the data source to the mediaFile location
 //            mediaPlayer.setDataSource(mediaFile)
-            if (mediaFile != null){
-                mediaPlayer.setDataSource(mediaFile);
-                mediaFile = null;
-            }else {
-                mediaPlayer.setDataSource(activeAudio.getData());
-            }
+           mediaPlayer.setDataSource(activeAudio.getData());
+
         } catch (IOException e) {
             e.printStackTrace();
             stopSelf();
@@ -342,6 +340,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 PhoneStateListener.LISTEN_CALL_STATE);
     }
     private void playMedia() {
+        if (mediaPlayer == null) return;
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
         }
@@ -355,6 +354,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void pauseMedia() {
+        if (mediaPlayer== null) return;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             resumePosition = mediaPlayer.getCurrentPosition();
@@ -362,6 +362,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void resumeMedia() {
+        if (mediaPlayer==null) return;
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.seekTo(resumePosition);
             mediaPlayer.start();
@@ -457,11 +458,8 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private void updateMetaData() {
-        Bitmap albumArt = BitmapFactory.decodeResource(getResources(),
-                R.drawable.categoryimage5); //replace with medias albumArt
-        // Update the current metadata
+
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, activeAudio.getArtist())
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, activeAudio.getAlbum())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, activeAudio.getTitle())
@@ -511,7 +509,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     private void buildNotification(PlaybackStatus playbackStatus) {
 
-        int notificationAction = android.R.drawable.ic_media_pause;//needs to be initialized
+        notificationAction = android.R.drawable.ic_media_pause;//needs to be initialized
         PendingIntent play_pauseAction = null;
 
         //Build a new notification according to the current state of the MediaPlayer
@@ -525,31 +523,47 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             play_pauseAction = playbackAction(0);
         }
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(),
-                R.drawable.categoryimage5); //replace with your own image
+        final Bitmap[] largeIcon = {null}; //replace with your own image
 
-        // Create a new Notification
-        NotificationCompat.Builder notificationBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                .setShowWhen(false)
-                // Set the Notification style
-                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
-                        // Attach our MediaSession token
-                        .setMediaSession(mediaSession.getSessionToken())
-                        // Show our playback controls in the compact notification view.
-                        .setShowActionsInCompactView(0, 1, 2))
-                // Set the Notification color
-                .setColor(getResources().getColor(R.color.colorPrimary))
-                // Set the large and small icons
-                .setLargeIcon(largeIcon)
-                .setSmallIcon(android.R.drawable.stat_sys_headset)
-                // Set Notification content information
-                .setContentText(activeAudio.getArtist())
-                .setContentTitle(activeAudio.getAlbum())
-                .setContentInfo(activeAudio.getTitle())
-                // Add playback actions
-                .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
-                .addAction(notificationAction, "pause", play_pauseAction)
-                .addAction(android.R.drawable.ic_media_next, "next", playbackAction(2));
+        Picasso.with(this).load(R.drawable.categoryimage5).into(new Target() {
+             @Override
+             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                 largeIcon[0] = bitmap;
+             }
+
+             @Override
+             public void onBitmapFailed(Drawable errorDrawable) {
+
+             }
+
+             @Override
+             public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+             }
+         });
+                // Create a new Notification
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                        .setShowWhen(false)
+                        // Set the Notification style
+                        .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+                                // Attach our MediaSession token
+                                .setMediaSession(mediaSession.getSessionToken())
+                                // Show our playback controls in the compact notification view.
+                                .setShowActionsInCompactView(0, 1, 2))
+                        // Set the Notification color
+                        .setColor(getResources().getColor(R.color.colorPrimary))
+                        // Set the large and small icons
+                        .setLargeIcon(largeIcon[0])
+                        .setSmallIcon(android.R.drawable.stat_sys_headset)
+                        // Set Notification content information
+                        .setContentText(activeAudio.getArtist())
+                        .setContentTitle(activeAudio.getAlbum())
+                        .setContentInfo(activeAudio.getTitle())
+                        // Add playback actions
+                        .addAction(android.R.drawable.ic_media_previous, "previous", playbackAction(3))
+                        .addAction(notificationAction, "pause", play_pauseAction)
+                        .addAction(android.R.drawable.ic_media_next, "next", playbackAction(2))
+                        .addAction(R.drawable.ic_stop_black_24dp, "stop", playbackAction(4));
 
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).notify(NOTIFICATION_ID, notificationBuilder.build());
     }
@@ -578,6 +592,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
                 // Previous track
                 playbackAction.setAction(ACTION_PREVIOUS);
                 return PendingIntent.getService(this, actionNumber, playbackAction, 0);
+            case 4:
+            // stop musicPlayer
+            playbackAction.setAction(ACTION_STOP);
+            return PendingIntent.getService(this, actionNumber, playbackAction, 0);
             default:
                 break;
         }
@@ -598,6 +616,10 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             transportControls.skipToPrevious();
         } else if (actionString.equalsIgnoreCase(ACTION_STOP)) {
             transportControls.stop();
+            stopMedia();
+            stopSelf();
         }
     }
+
+
 }

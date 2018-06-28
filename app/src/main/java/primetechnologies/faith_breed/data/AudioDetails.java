@@ -1,26 +1,27 @@
 package primetechnologies.faith_breed.data;
 
 public class AudioDetails {
-    String audioName;
-    String audioArtist;
-    String audioImageLink;
-    String audioDownloadLink;
+    private String audioName;
+    private String audioArtist;
+    private String audioImageLink;
+    private String audioDownloadLink;
 
-    public String getAudioArtist() {
-        return audioArtist;
-    }
 
-    public String getAudioImageLink() {
-        return audioImageLink;
-    }
-
-    public String getAudioDownloadLink() {
-        return audioDownloadLink;
-    }
 
     public String getAudioName() {
         return audioName;
     }
+    public String getAudioDownloadLink() {
+        return audioDownloadLink;
+    }
+    public String getAudioImageLink() {
+        return audioImageLink;
+    }
+    public String getAudioArtist() {
+        return audioArtist;
+    }
+
+
 
 
     public void setAudioArtist(String audioArtist) {

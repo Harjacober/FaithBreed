@@ -5,35 +5,50 @@
     <item
         android:id="@+id/home"
         android:orderInCategory="100"
-        android:title="Home "
+        android:title="@string/home"
         android:icon="@drawable/ic_home_black_24dp"
         app:showAsAction="always" />
     <item
         android:id="@+id/music_library"
         android:orderInCategory="100"
-        android:title="music library"
+        android:title="@string/music_library"
         android:icon="@drawable/ic_library_music_black_24dp"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/wallet"
         android:orderInCategory="100"
-        android:title="Wallet"
+        android:title="@string/wallet"
         android:icon="@drawable/ic_account_balance_wallet_black_24dp"
         app:showAsAction="always" />
     <item
         android:id="@+id/download_page"
         android:orderInCategory="200"
-        android:title="downloads"
+        android:title="@string/downloads"
         app:showAsAction="never" />
     <item
         android:id="@+id/add_money"
         android:orderInCategory="200"
-        android:title="Add money"
+        android:title="@string/add_money"
         app:showAsAction="never" />
     <item
         android:id="@+id/signout"
         android:orderInCategory="200"
-        android:title="Sign Out"
+        android:title="@string/sign_out"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="200"
+        android:title="@string/about"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/contactus"
+        android:orderInCategory="200"
+        android:title="@string/contact_us"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/rate_this_app"
+        android:orderInCategory="200"
+        android:title="@string/rate_this_app"
         app:showAsAction="never" />
 </menu>

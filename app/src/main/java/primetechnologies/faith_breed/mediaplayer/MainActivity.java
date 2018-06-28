@@ -3,6 +3,7 @@ package primetechnologies.faith_breed.mediaplayer;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.TypedArray;
@@ -11,34 +12,42 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PersistableBundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import primetechnologies.faith_breed.AllAudioList;
 import primetechnologies.faith_breed.R;
 import primetechnologies.faith_breed.database.AudioContract;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements RecyclerView_Adapter.onItemClickListener,
+RecyclerView_Adapter.onDialogCreated{
 
     public static final String Broadcast_PLAY_NEW_AUDIO = "com.valdioveliu.valdio.audioplayer.PlayNewAudio";
 
     private PlayerService player;
     boolean serviceBound = false;
     ArrayList<Audio> audioList;
-
+    private ImageView playPause;
+    RecyclerView_Adapter adapter;
     ImageView collapsingImageView;
 
     int imageIndex = 0;
@@ -49,12 +58,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
+        getSupportActionBar().setElevation(0);
         collapsingImageView = findViewById(R.id.collapsingImageView);
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(AllAudioList.AUDSTREAMLINK)){
-            streamAudio(intent.getStringExtra(AllAudioList.AUDSTREAMLINK));
-        }
+        playPause = findViewById(R.id.play_pause);
         audioList = new ArrayList<>();
         loadCollapsingImage(imageIndex);
         loadAudio();
@@ -76,9 +83,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        android.support.v7.app.ActionBar actiobar=getSupportActionBar();
-        if (actiobar!=null){
-            actiobar.setDisplayHomeAsUpEnabled(true);
+        android.support.v7.app.ActionBar actionbar=getSupportActionBar();
+        if (actionbar!=null){
+            actionbar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
@@ -86,22 +93,19 @@ public class MainActivity extends AppCompatActivity {
     private void initRecyclerView() {
         if (audioList.size() > 0) {
             RecyclerView recyclerView =  findViewById(R.id.recyclerview);
-            RecyclerView_Adapter adapter = new RecyclerView_Adapter(audioList, getApplication());
+            adapter = new RecyclerView_Adapter(audioList,
+                    getApplication(), this, this);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.addOnItemTouchListener(new CustomTouchListener(this, new onItemClickListener() {
-                @Override
-                public void onClick(View view, int index) {
-                    playAudio(index);
-                }
-            }));
 
         }
     }
 
     private void loadCollapsingImage(int i) {
         TypedArray array = getResources().obtainTypedArray(R.array.images);
-        collapsingImageView.setImageDrawable(array.getDrawable(i));
+        Picasso.with(this).load(array.getResourceId(i, 0))
+                .resize(400,400).into(collapsingImageView);
+        array.recycle();
     }
 
     @Override
@@ -122,7 +126,8 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }else if (id == android.R.id.home){
-            NavUtils.navigateUpFromSameTask(this);
+           NavUtils.navigateUpFromSameTask(this);
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -208,26 +213,70 @@ public class MainActivity extends AppCompatActivity {
         cursor.close();
     }
 
-    public void streamAudio(String media){
-        if (!serviceBound) {
-            Intent playerIntent = new Intent(this, PlayerService.class);
-            playerIntent.putExtra("media", media);
-            startService(playerIntent);
-            bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-        } else {
-            //Service is active
-            //Send media with BroadcastReceiver
-        }
-    }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (serviceBound) {
             unbindService(serviceConnection);
             //service is active
-            player.stopSelf();
         }
+    }
+
+    @Override
+    public void onClick(boolean isHighlighted, int index, String data) {
+        if (!isHighlighted){
+            File file = new File(data);
+            if (file.exists()) {
+                playAudio(index);
+            }else {
+                Toast.makeText(this, "File has been modified or deletd",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showDeleteDialog(final List<Audio> list, final ArrayList<Audio> selectedItems2) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure you want to delete this Audio?")
+                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //TODO Move this method to run in the background
+                        for (Audio object : selectedItems2) {
+                            list.remove(object);
+                            selectedItems2.clear();
+                            adapter.update(list);
+                            File file = new File(object.getData());
+                            if (file.exists()) {
+                                if(file.delete()){
+                                    String selection = AudioContract.AudioEntry.COLUMN_DOWNLOAD_LINK+"=?";
+                                    String[] selectionArgs = new String[]{object.getData()};
+                                    getContentResolver().delete(AudioContract.AudioEntry.CONTENT_URI,
+                                            selection, selectionArgs);
+                                }
+                            }else{
+                                String selection = AudioContract.AudioEntry.COLUMN_DOWNLOAD_LINK+"=?";
+                                String[] selectionArgs = new String[]{object.getData()};
+                                getContentResolver().delete(AudioContract.AudioEntry.CONTENT_URI,
+                                        selection, selectionArgs);
+
+                            }
+
+                        }
+                    }
+                }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+//        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.show();
+    }
+
+    @Override
+    public void onCreated(List<Audio> list, ArrayList<Audio> selectedList) {
+        showDeleteDialog(list, selectedList);
     }
 }
